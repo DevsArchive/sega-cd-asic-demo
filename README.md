@@ -3,6 +3,8 @@ This is a basic demonstration of the ASIC graphics chip found on the Sega CD. In
 
 This demo draws a scaled repeating 256x256 pixel stamp map with 32x32 pixel stamps.
 
+[Video](https://www.youtube.com/watch?v=YM9s1ydWsq4)
+
 ## Technical details
 The input image consists of a tilemap made up of metatiles (called stamps). Stamps are made up of 8x8 Mega Drive tiles, arranged vertically (just like Mega Drive sprites). They can either be 16x16 or 32x32 pixels in size. Stamp data is to be stored at the beginning of Word RAM, and the first stamp MUST be blank.
 
