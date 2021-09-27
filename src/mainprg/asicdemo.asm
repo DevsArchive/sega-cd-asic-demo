@@ -35,6 +35,7 @@ Main:
 
 	move.w	#$8134,VDP_CTRL			; Disable display
 	move.w	#$8200|($E000/$400),VDP_CTRL	; Set plane A to same address as plane B
+	move.w	#$8500|($F800/$200),VDP_CTRL	; Set sprite table to $FC00
 	move.w	#$8C00,VDP_CTRL			; H32 mode
 
 	lea	ASICStamps,a0			; Load stamp data
