@@ -14,13 +14,15 @@
 
 IMG_WIDTH	EQU	256			; Image buffer width
 IMG_HEIGHT	EQU	224			; Image buffer height
+IMG_SIZE	EQU	(IMG_WIDTH/8)*(IMG_HEIGHT/8)*$20
 
 ; -------------------------------------------------------------------------
 ; Variables
 ; -------------------------------------------------------------------------
 
 scale:		dc.w	0			; Scale value
-asicDone:	dc.w	0			; ASIC done flag
+asicDone:	dc.b	0			; ASIC done flag
+bufferID:	dc.b	0			; Buffer ID
 
 ; -------------------------------------------------------------------------
 ; Main program
@@ -32,6 +34,7 @@ Main:
 	bsr.w	RequestWordRAM			; Request Word RAM access
 
 	move.w	#$8134,VDP_CTRL			; Disable display
+	move.w	#$8200|($E000/$400),VDP_CTRL	; Set plane A to same address as plane B
 	move.w	#$8C00,VDP_CTRL			; H32 mode
 
 	lea	ASICStamps,a0			; Load stamp data
@@ -54,7 +57,7 @@ Main:
 	move.l	(a0)+,(a1)+
 	dbf	d0,.LoadPal
 
-	move.l	#$40000003,d0			; Load tilemap
+	move.l	#$60800003,d0			; Load tilemap
 	moveq	#1,d4				; (Tiles are arranged vertically)
 	moveq	#2-1,d5
 	move.w	#$8F80,VDP_CTRL
@@ -74,9 +77,12 @@ Main:
 	dbf	d3,.MapTile
 	dbf	d1,.MapCol
 
-	move.l	#$40400003,d0
+	move.l	#$60C00003,d0
 	dbf	d5,.LoadMap
 	move.w	#$8F02,VDP_CTRL
+
+	move.l	#$40000010,VDP_CTRL		; Move to top of map
+	move.l	#$00080008,VDP_DATA
 
 ; -------------------------------------------------------------------------
 
@@ -163,10 +169,32 @@ VInt_ASIC:
 	dma68k	palette,0,$80,CRAM,a6		; Transfer palette data
 	
 	bclr	#0,asicDone			; Transfer ASIC graphics data
-	beq.s	.NoASIC
-	dma68k	WORDRAM_2M+IMG_BUFFER+2,$20,(IMG_WIDTH/8)*(IMG_HEIGHT/8)*$20,VRAM,a6
-	move.l	#$40200000,(a6)
+	beq.w	.NoASIC
+
+	tst.b	bufferID
+	beq.s	.Buffer0
+	dma68k	WORDRAM_2M+IMG_BUFFER+2,$20,IMG_SIZE,VRAM,a6
+	vdpCmd	move.l,$20,VRAM,WRITE,(a6)
 	move.l	WORDRAM_2M+IMG_BUFFER,-4(a6)
+	bra.s	.ASICDone
+
+.Buffer0:
+	dma68k	WORDRAM_2M+IMG_BUFFER+2,$20+IMG_SIZE,IMG_SIZE,VRAM,a6
+	vdpCmd	move.l,$20+IMG_SIZE,VRAM,WRITE,(a6)
+	move.l	WORDRAM_2M+IMG_BUFFER,-4(a6)
+
+.ASICDone:
+	not.b	bufferID			; Swap buffer
+	bne.s	.HScrollBuf1
+	move.l	#$7C000003,(a6)
+	move.l	#$00000000,-4(a6)
+	bra.s	.Display
+
+.HScrollBuf1:
+	move.l	#$7C000003,(a6)
+	move.l	#$01000100,-4(a6)
+
+.Display:
 	move.w	#$8174,(a6)			; Enable display
 
 .NoASIC:
