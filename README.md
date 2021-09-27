@@ -22,29 +22,29 @@ The Sub CPU must have access to Word RAM in order for the rendering to operate.
 
 ## Registers
 * $FF8058 - Stamp size
- * Bit 15 = GRON, 0 if ASIC is inactive, 1 if it's busy rendering.
- * Bit 2 = SMS, Stamp map size. 0 for 256x256 pixel map, 1 for 4096x4096 pixel map.
- * Bit 1 = STS, Stamp size. 0 for 16x16 pixel stamps, 1 for 32x32 pixel stamps.
- * Bit 0 = RPT, 0 for no repeating stamp map, 1 for repeating stamp map when out of bounds.
+    * Bit 15 = GRON, 0 if ASIC is inactive, 1 if it's busy rendering.
+    * Bit 2 = SMS, Stamp map size. 0 for 256x256 pixel map, 1 for 4096x4096 pixel map.
+    * Bit 1 = STS, Stamp size. 0 for 16x16 pixel stamps, 1 for 32x32 pixel stamps.
+    * Bit 0 = RPT, 0 for no repeating stamp map, 1 for repeating stamp map when out of bounds.
 * $FF805A - Stamp map base address
- * Holds the stamp map base address, relative to the start of Word RAM, divided by 4.
- * 256x256 map, 16x16 stamps - Bits 7-15 are used.
- * 256x256 map, 32x32 stamps - Bits 5-15 are used.
- * 4096x4096 map, 16x16 stamps - Bits 13-15 are used.
- * 4096x4096 map, 32x32 stamps - Only bit 15 is used.
+    * Holds the stamp map base address, relative to the start of Word RAM, divided by 4.
+    * 256x256 map, 16x16 stamps - Bits 7-15 are used.
+    * 256x256 map, 32x32 stamps - Bits 5-15 are used.
+    * 4096x4096 map, 16x16 stamps - Bits 13-15 are used.
+    * 4096x4096 map, 32x32 stamps - Only bit 15 is used.
 * $FF805C - Image buffer vertical tile size
- * Set this to the height of the image buffer in pixels, divided by 8, minus 1.
+    * Set this to the height of the image buffer in pixels, divided by 8, minus 1.
 * $FF805E - Image buffer start address
- * Holds the image buffer start address, relative to the start of Word RAM, divided by 4. Bits 3-15 are used.
+    * Holds the image buffer start address, relative to the start of Word RAM, divided by 4. Bits 3-15 are used.
 * $FF8060 - Image buffer offset
- * Offsets the initial drawing position in the image buffer.
- * Bits 0-2 hold the horizontal offset.
- * Bits 3-5 hold the vertical offset.
+    * Offsets the initial drawing position in the image buffer.
+    * Bits 0-2 hold the horizontal offset.
+    * Bits 3-5 hold the vertical offset.
 * $FF8062 - Image buffer horizontal pixel size
- * Set this to the width of the image buffer in pixels (9 bits).
+    * Set this to the width of the image buffer in pixels (9 bits).
 * $FF8064 - Image buffer vertical pixel size
- * Set this to the height of the image buffer in pixels (8 bits).
- * This is decremented to 0 during the ASIC's operation, so it must be reset every time the ASIC should start rendering.
+    * Set this to the height of the image buffer in pixels (8 bits).
+    * This is decremented to 0 during the ASIC's operation, so it must be reset every time the ASIC should start rendering.
 * $FF8066 - Trace table base address
- * Holds the trace table base address, relative to the start of Word RAM, divided by 4. Bits 1-15 are used.
- * Setting this will start the rendering process.
+    * Holds the trace table base address, relative to the start of Word RAM, divided by 4. Bits 1-15 are used.
+    * Setting this will start the rendering process.
