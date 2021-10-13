@@ -36,7 +36,9 @@ Main:
 	move.w	#$8134,VDP_CTRL			; Disable display
 	move.w	#$8200|($E000/$400),VDP_CTRL	; Set plane A to same address as plane B
 	move.w	#$8500|($F800/$200),VDP_CTRL	; Set sprite table to $FC00
+	move.w	#$8B00,VDP_CTRL			; Scroll by screen
 	move.w	#$8C00,VDP_CTRL			; H32 mode
+	move.w	#$8D00|($FC00/$400),VDP_CTRL	; Set HScroll table to 0xFC00
 
 	lea	ASICStamps,a0			; Load stamp data
 	lea	WORDRAM_2M+STAMP_DATA+$200,a1
