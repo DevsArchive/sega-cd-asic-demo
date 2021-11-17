@@ -10,7 +10,7 @@ The input image consists of a tilemap made up of metatiles (called stamps). Stam
 
 The stamp map can either be 16x16 16x16 stamps or 8x8 32x32 stamps in size (256x256 pixels), or 256x256 16x16 stamps or 128x128 32x32 stamps in size (4096x4096 pixels).
 
-Stamp IDs in the stamp map are just the address of the stamp you want to use, divided by $80, and fit within 11 bits. With 32x32 stamps, the last 2 bits are masked out (making them only multiples of 4). The top 3 bits are used for flipping and rotation. Bit 15 controls the horizontal flip of a stamp, and bits 13 and 14 control the rotation (00 = 0 degrees, 01 = 90 degrees, 10 = 180 degrees, 11 = 270 degrees).
+Stamp IDs in the stamp map are just the address of the stamp you want to use, divided by $80, and fit within 11 bits. With 32x32 stamps, the last 2 bits are masked out (making them only multiples of 4). The top 3 bits are used for flipping and rotation. Bit 15 controls the horizontal flip of a stamp, and bits 13 and 14 control the rotation (00 = 0 degrees, 01 = 270 degrees, 10 = 180 degrees, 11 = 90 degrees).
 
 The image buffer is the area of Word RAM that will hold the final rendered image that can be transferred into VRAM. The size of the image buffer can be set by the user.
 
