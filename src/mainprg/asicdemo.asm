@@ -16,9 +16,9 @@ scale:		dc.w	0			; Scale value
 asicDone:	dc.b	0			; ASIC done flag
 bufferID:	dc.b	0			; Buffer ID
 
-camera_x:	dc.w	0			; Camera X
+camera_x:	dc.w	$3000			; Camera X
 camera_y:	dc.w	$4000			; Camera Y
-camera_z:	dc.w	0			; Camera Z
+camera_z:	dc.w	$3000			; Camera Z
 camera_angle:	dc.w	0			; Camera angle
 
 ; -------------------------------------------------------------------------
@@ -88,7 +88,6 @@ Main:
 	addi.w	#$20,camera_x			; Move camera
 	addi.w	#$20,camera_z
 	addq.w	#2,camera_angle
-	andi.w	#$1FE,camera_angle
 
 	move.w	camera_x,d0			; Start rendering
 	move.w	camera_y,d1

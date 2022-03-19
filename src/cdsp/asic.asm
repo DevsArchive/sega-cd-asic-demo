@@ -21,6 +21,7 @@
 
 SP_ASICRender:
 	move.w	GA_CMD_6.w,d0			; Get sine values
+	andi.w	#$1FE,d0
 	lea	SineTable+$10(pc),a0
 	move.w	-$10(a0,d0.w),d2		; sin(a)
 	move.w	$70(a0,d0.w),d3			; cos(a)
