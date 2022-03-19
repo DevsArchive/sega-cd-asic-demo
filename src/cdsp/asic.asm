@@ -44,7 +44,7 @@ SP_ASICRender:
 	move.w	#IMG_WIDTH/2,d4			; lxr = center * lcf
 	muls.w	d0,d4
 	lsr.l	#8,d4
-	move.w	#IMG_WIDTH/2,d5			; lyr = fov * lsf
+	move.w	#IMG_FOV,d5			; lyr = fov * lsf
 	muls.w	d1,d5
 	lsr.l	#8,d5
 
@@ -56,7 +56,7 @@ SP_ASICRender:
 	move.w	#IMG_WIDTH/2,d4			; lxr = center * lsf
 	muls.w	d1,d4
 	lsr.l	#8,d4
-	move.w	#IMG_WIDTH/2,d5			; lyr = fov * lcf
+	move.w	#IMG_FOV,d5			; lyr = fov * lcf
 	muls.w	d0,d5
 	lsr.l	#8,d5
 
@@ -77,7 +77,7 @@ SP_ASICRender:
 	move.w	#STAMP_MAP/4,GA_STAMP_MAP.w	; Set stamp map address
 	move.w	#IMG_BUFFER/4,GA_IMG_START.w	; Set image buffer address
 	
-	move.w	#%011,GA_STAMP_SIZE.w		; Set stamp size
+	move.w	#%111,GA_STAMP_SIZE.w		; 4096x4096 repeated map, 32x32 stamps
 	move.w	#IMG_WIDTH,GA_IMG_HDOT.w	; Set image buffer horizontal resolution
 	move.w	#IMG_HEIGHT,GA_IMG_VDOT.w	; Set image buffer vertical resolution
 	move.w	#IMG_TILE_H-1,GA_IMG_VCELL.w

@@ -38,20 +38,16 @@ Main:
 	move.w	#$8D00|($FC00/$400),VDP_CTRL	; Set HScroll table to $FC00
 
 	lea	ASICStamps,a0			; Load stamp data
-	lea	WORDRAM_2M+STAMP_DATA+$200,a1
+	lea	WORDRAM_2M+STAMP_DATA,a1
 	bsr.w	CompDec
 	
 	lea	ASICStampMap,a0			; Load stamp map
 	lea	WORDRAM_2M+STAMP_MAP,a1
-	move.w	#(ASICStampMap_End-ASICStampMap)/4-1,d0
-
-.LoadStampMap:
-	move.l	(a0)+,(a1)+
-	dbf	d0,.LoadStampMap
+	bsr.w	CompDec
 
 	lea	ASICPalette,a0			; Load palette
 	lea	palette.w,a1
-	moveq	#$10/4-1,d0
+	moveq	#$20/4-1,d0
 
 .LoadPal:
 	move.l	(a0)+,(a1)+
@@ -200,7 +196,7 @@ ASICStamps:
 	even
 
 ASICStampMap:
-	incbin	"mainprg/data/stampmap.bin"
+	incbin	"mainprg/data/stampmap.comp"
 ASICStampMap_End:
 	even
 
