@@ -1,7 +1,7 @@
 # Sega CD ASIC Graphics Demo
 This is a basic demonstration of the ASIC graphics chip found on the Sega CD. In 2M/2M mode, it can be used to scale and rotate an image, alongside other fun kinds of manipulation.
 
-This demo draws a scaled repeating 256x256 pixel stamp map with 32x32 pixel stamps.
+This demo draws a repeating 4096x4096 pixel stamp map with 32x32 pixel stamps from Sonic CD, transformed into a 3D plane.
 
 ## Technical details
 The input image consists of a tilemap made up of metatiles (called stamps). Stamps are made up of 8x8 Mega Drive tiles, arranged vertically (just like Mega Drive sprites). They can either be 16x16 or 32x32 pixels in size. Stamp data is to be stored at the beginning of Word RAM, and the first stamp MUST be blank.
