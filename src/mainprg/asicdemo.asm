@@ -9,20 +9,17 @@
 	include	"cdsp/asicdef.asm"
 
 ; -------------------------------------------------------------------------
-; Constants
-; -------------------------------------------------------------------------
-
-IMG_WIDTH	EQU	256			; Image buffer width
-IMG_HEIGHT	EQU	224			; Image buffer height
-IMG_SIZE	EQU	(IMG_WIDTH/8)*(IMG_HEIGHT/8)*$20
-
-; -------------------------------------------------------------------------
 ; Variables
 ; -------------------------------------------------------------------------
 
 scale:		dc.w	0			; Scale value
 asicDone:	dc.b	0			; ASIC done flag
 bufferID:	dc.b	0			; Buffer ID
+
+camera_x:	dc.w	0			; Camera X
+camera_y:	dc.w	$4000			; Camera Y
+camera_z:	dc.w	0			; Camera Z
+camera_angle:	dc.w	0			; Camera angle
 
 ; -------------------------------------------------------------------------
 ; Main program
@@ -60,7 +57,7 @@ Main:
 	move.l	(a0)+,(a1)+
 	dbf	d0,.LoadPal
 
-	move.l	#$60800003,d0			; Load tilemap
+	move.l	#$67800003,d0			; Load tilemap
 	moveq	#1,d4				; (Tiles are arranged vertically)
 	moveq	#2-1,d5
 	move.w	#$8F80,VDP_CTRL
@@ -80,7 +77,7 @@ Main:
 	dbf	d3,.MapTile
 	dbf	d1,.MapCol
 
-	move.l	#$60C00003,d0
+	move.l	#$67C00003,d0
 	dbf	d5,.LoadMap
 	move.w	#$8F02,VDP_CTRL
 
@@ -92,28 +89,15 @@ Main:
 .Loop:
 	bsr.w	VSync				; VSync
 
-	lea	WORDRAM_2M+TRACE_TABLE,a0	; Set up trace table
-	move.w	#IMG_HEIGHT-1,d0
-	moveq	#0,d1
-	move.w	scale,d2			; Make scale value 5.11 fixed point for delta
-	lsl.w	#8,d2
+	addi.w	#$20,camera_x			; Move camera
+	addi.w	#$20,camera_z
+	addq.w	#2,camera_angle
+	andi.w	#$1FE,camera_angle
 
-.TraceTable:
-	clr.w	(a0)+				; X start
-	move.w	d1,(a0)+			; Y start
-	add.w	scale,d1			; Use scale to get next Y
-	move.w	d2,(a0)+			; X delta
-	clr.w	(a0)+				; Y delta
-	dbf	d0,.TraceTable
-
-	addq.w	#1,scale			; Increase scale value
-	andi.w	#$7F,scale
-
-						; Start rendering
-	moveq	#%011,d0
-	move.w	#IMG_WIDTH,d1
-	move.w	#IMG_HEIGHT,d2
-	moveq	#0,d3
+	move.w	camera_x,d0			; Start rendering
+	move.w	camera_y,d1
+	move.w	camera_z,d2
+	move.w	camera_angle,d3
 	bsr.s	ASICRender
 
 .Wait:
@@ -128,10 +112,10 @@ Main:
 ; Start ASIC rendering
 ; -------------------------------------------------------------------------
 ; PARAMETERS:
-;	d0.w	- Stamp size
-;	d1.w	- Image buffer width
-;	d2.w	- Image buffer height
-;	d3.w	- Image buffer offset
+;	Cmd 0	- Camera X
+;	Cmd 2	- Camera Y
+;	Cmd 4	- Camera Z
+;	Cmd 6	- Camera angle
 ; -------------------------------------------------------------------------
 
 ASICRender:
