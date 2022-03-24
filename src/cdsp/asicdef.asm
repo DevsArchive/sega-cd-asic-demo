@@ -13,7 +13,7 @@ IMG_BUFFER	EQU	$30000			; Image buffer location in Word RAM
 
 IMG_WIDTH	EQU	256			; Image buffer width
 IMG_HEIGHT	EQU	112			; Image buffer height
-IMG_FOV		EQU	120			; FOV
+IMG_FOV		EQU	160			; FOV
 IMG_TILE_H	EQU	(IMG_HEIGHT+((7-(IMG_HEIGHT&7))&7))/8
 IMG_SIZE	EQU	(IMG_WIDTH/8)*(IMG_HEIGHT/8)*$20
 
