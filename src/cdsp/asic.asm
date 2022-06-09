@@ -22,9 +22,9 @@
 SP_ASICRender:
 	move.w	GA_CMD_6.w,d0			; Get sine values
 	andi.w	#$1FE,d0
-	lea	SineTable(pc),a0
-	move.w	(a0,d0.w),d2			; sin(a)
-	move.w	$80(a0,d0.w),d3			; cos(a)
+	lea	SineTable+$10(pc),a0
+	move.w	-$10(a0,d0.w),d2		; sin(a)
+	move.w	$70(a0,d0.w),d3			; cos(a)
 
 	lea	WORDRAM_2M+TRACE_TABLE,a0	; Trace table
 	lea	ReciprocalLUT(pc),a1		; Reciprocal LUT
